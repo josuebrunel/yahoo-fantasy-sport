@@ -19,12 +19,21 @@ class FantasySport(object):
     def _get(self, uri):
         """
         """
+
+        if not self.oauth.oauth.base_url :
+            self.oauth.oauth.base_url = self.url
+
         if not self.oauth.token_is_valid():
             self.oauth.refresh_access_token
 
         response = self.oauth.session.get(uri)
 
         return response
+
+    def _post(self, uri, data={}):
+        """
+        """
+        pass
 
     def get_game_info(self, game):
         """Return game info

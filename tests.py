@@ -25,14 +25,22 @@ class TestFantasySport(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
-    def test_get_league(self):
+    def test_get_leagues(self):
         response = self.yfs.get_leagues(['238.l.627060'])
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
-    def test_get_league_with_multiple_keys(self,):
+    def test_get_leagues_with_multiple_keys(self,):
         self.yfs.fmt = 'xml'
         response = self.yfs.get_leagues(('238.l.627060','238.l.627062'))
         self.yfs.fmt = 'json'
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_xml(response.content))
+
+    def test_get_leagues_scoreboard(self):
+        response = self.yfs.get_leagues_scoreboard(['238.l.627060'])
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
+
+    

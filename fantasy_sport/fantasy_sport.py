@@ -115,6 +115,14 @@ class FantasySport(object):
         response = self._get(uri)
         return response
 
+    def get_leagues_transactions(self, league_keys):
+        """Return leagues settings
+        >>> yfs.get_leagues_transactions(['238.l.627062'])
+        """
+        uri = self._build_uri('leagues;league_keys', league_keys, sub='transactions')
+        response = self._get(uri)
+        return response
+
 
     ###################################
     #

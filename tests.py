@@ -24,7 +24,9 @@ class TestFantasySport(unittest.TestCase):
         logging.debug(pretty_json(response.content))
         
     def test_get_games_info_with_login(self,):
-        response = self.yfs.get_games_info(['mlb'], use_login=True)
+        self.yfs.use_login = True
+        response = self.yfs.get_games_info(['mlb'])
+        self.yfs.use_login = False
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
@@ -59,4 +61,10 @@ class TestFantasySport(unittest.TestCase):
         response = self.yfs.get_leagues_transactions(['238.l.627060','238.l.627062'])
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
+
+    def test_get_leagues_teams(self,):
+        response = self.yfs.get_leagues_teams(['238.l.627060'])
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
 

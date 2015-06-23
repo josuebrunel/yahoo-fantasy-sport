@@ -7,10 +7,11 @@ class FantasySport(object):
 
     url = 'http://fantasysports.yahooapis.com/fantasy/v2/'
 
-    def __init__(self, oauth, resource=None):
+    def __init__(self, oauth, resource=None, use_login=False):
         """Initialize a FantasySport object
         """
         self.oauth = oauth
+        self.use_login = use_login
 
 
     def __repr__(self,):
@@ -35,12 +36,21 @@ class FantasySport(object):
         """
         pass
 
-    def get_game_info(self, game):
+    def _add_login(self, uri):
+        """Add users;use_login=1/ to the uri
+        """
+        uri = "users;use_login=1/{0}".format(uri)
+
+        return uri
+
+    def get_games_info(self, game_keys, use_login=False):
         """Return game info
         >>> yfs.get_game_info('mlb')
         """
-        uri = 'games;games_keys={0}'.format(game)
+        uri = 'games;game_keys={0}'.format(game_keys)
 
+        if use_login:
+            uri = self._add_login(uri)
         response = self._get(uri)
 
         return response

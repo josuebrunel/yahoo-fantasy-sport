@@ -9,6 +9,9 @@ from fantasy_sport.utils import pretty_json, pretty_xml
 
 logging.getLogger('yahoo_oauth').setLevel(logging.WARNING)
 
+logging.basicConfig(level=logging.DEBUG,format="[%(asctime)s %(levelname)s] [%(name)s.%(module)s.%(funcName)s] %(message)s \n")
+logging.getLogger('test-fantasy-sports')
+
 class TestFantasySport(unittest.TestCase):
 
     def setUp(self,):
@@ -21,18 +24,58 @@ class TestFantasySport(unittest.TestCase):
         logging.debug(pretty_json(response.content))
         
     def test_get_games_info_with_login(self,):
-        response = self.yfs.get_games_info(['mlb'], use_login=True)
+        self.yfs.use_login = True
+        response = self.yfs.get_games_info(['mlb'])
+        self.yfs.use_login = False
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
-    def test_get_league(self):
+    def test_get_leagues(self):
         response = self.yfs.get_leagues(['238.l.627060'])
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
-    def test_get_league_with_multiple_keys(self,):
+    def test_get_leagues_with_multiple_keys(self,):
         self.yfs.fmt = 'xml'
         response = self.yfs.get_leagues(('238.l.627060','238.l.627062'))
         self.yfs.fmt = 'json'
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_xml(response.content))
+
+    def test_get_leagues_scoreboard(self):
+        response = self.yfs.get_leagues_scoreboard(['238.l.627060'])
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
+    def test_get_leagues_scoreboard_week_2(self):
+        response = self.yfs.get_leagues_scoreboard(['238.l.178574'], week=2)
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
+
+    def test_get_leagues_settings(self):
+        response = self.yfs.get_leagues_settings(['238.l.627060','238.l.627062'])
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
+    def test_get_leagues_standings(self):
+        response = self.yfs.get_leagues_standings(['238.l.627060','238.l.627062'])
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
+    def test_get_leagues_transactions(self):
+        response = self.yfs.get_leagues_transactions(['238.l.627060','238.l.627062'])
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
+    def test_get_leagues_teams(self,):
+        response = self.yfs.get_leagues_teams(['238.l.627060'])
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
+    def test_get_leagues_draftresults(self,):
+        response = self.yfs.get_leagues_draftresults(['238.l.627060'])
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+
+

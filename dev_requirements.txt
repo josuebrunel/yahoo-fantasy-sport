@@ -1,3 +1,7 @@
+PyYAML==3.11
+coverage==3.7.1
+coveralls==0.5
+docopt==0.6.2
 myql==1.2.3
 oauthlib==0.7.2
 py==1.4.28

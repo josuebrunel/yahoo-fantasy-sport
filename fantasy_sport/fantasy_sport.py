@@ -97,11 +97,15 @@ class FantasySport(object):
         response = self._get(uri)
         return response
 
-    def get_leagues_scoreboard(self, league_keys):
+    def get_leagues_scoreboard(self, league_keys, week=None):
         """Return leagues scoreboard
         >>> yfs.get_leagues_scoreboard(['league_key'])
         """
         uri = self._build_uri('leagues;league_keys',league_keys, sub='scoreboard')
+
+        if week:
+            uri += ';week={0}'.format(week)
+
         response = self._get(uri)
         return response
 

@@ -11,8 +11,12 @@ class TestFantasySports(unittest.TestCase):
         oauth = OAuth2(None, None, from_file='oauth.json',base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
         self.yfs = FantasySport(oauth)
 
-    def test_get_game_info(self,):
-        response = self.yfs.get_game_info('mlb')
+    def test_get_games_info(self,):
+        response = self.yfs.get_games_info('mlb')
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_games_info_with_login(self,):
+        response = self.yfs.get_games_info('mlb', use_login=True)
         self.assertEqual(response.status_code, 200)
 
     def test_get_league(self):

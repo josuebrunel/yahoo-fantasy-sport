@@ -51,7 +51,7 @@ class FantasySport(object):
 
     def get_games_info(self, game_keys, use_login=False):
         """Return game info
-        >>> yfs.get_game_info('mlb')
+        >>> yfs.get_games_info('mlb')
         """
         uri = 'games;game_keys={0}'.format(self._format_resources_key(game_keys))
 
@@ -61,13 +61,38 @@ class FantasySport(object):
 
         return response
 
+    ####################################
+    #
+    #           LEAGUES 
+    #
+    ####################################
     def get_leagues(self, league_keys):
         """Return league data
-        >>> yfs.get_league(['league_key'])
+        >>> yfs.get_leagues(['league_key'])
         """     
         uri = 'leagues;league_keys={0}'.format(self._format_resources_key(league_keys))
 
         response = self._get(uri)
 
         return response
+
+    def get_leagues_scoreboard(self, league_keys):
+        """Return leagues scoreboard
+        >>> yfs.get_leagues_scoreboard(['league_key'])
+        """
+        uri = 'leagues;league_keys={0}/scoreboard'.format(self._format_resources_key(league_keys))
+        response = self._get(uri)
+        return response
+
+    ###################################
+    #
+    #           PLAYERS
+    #
+    ###################################
+
+    ###################################
+    #
+    #           TEAMS
+    #   
+    ###################################
 

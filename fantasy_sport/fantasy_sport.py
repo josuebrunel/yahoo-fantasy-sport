@@ -58,11 +58,17 @@ class FantasySport(object):
 
         return uri
 
+    #################################
+    #
+    #           GAMES
+    #
+    #################################
+
     def get_games_info(self, game_keys, use_login=False):
         """Return game info
         >>> yfs.get_games_info('mlb')
         """
-        uri = self._build_uri('games;games_keys',game_keys)
+        uri = self._build_uri('games;game_keys', game_keys)
 
         if use_login:
             uri = self._add_login(uri)
@@ -79,7 +85,7 @@ class FantasySport(object):
         """Return league data
         >>> yfs.get_leagues(['league_key'])
         """     
-        uri = self._build_uri('leagues;league_keys',game_keys)
+        uri = self._build_uri('leagues;league_keys',league_keys)
 
         response = self._get(uri)
 

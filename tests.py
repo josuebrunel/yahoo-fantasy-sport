@@ -9,6 +9,9 @@ from fantasy_sport.utils import pretty_json, pretty_xml
 
 logging.getLogger('yahoo_oauth').setLevel(logging.WARNING)
 
+logging.basicConfig(level=logging.DEBUG,format="[%(asctime)s %(levelname)s] [%(name)s.%(module)s.%(funcName)s] %(message)s \n")
+logging.getLogger('test-fantasy-sports')
+
 class TestFantasySport(unittest.TestCase):
 
     def setUp(self,):
@@ -52,5 +55,3 @@ class TestFantasySport(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
-
-    

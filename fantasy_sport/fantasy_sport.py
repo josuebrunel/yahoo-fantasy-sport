@@ -59,13 +59,22 @@ class FantasySport(object):
         """Build uri
         """
         uri = "{0}={1}".format(resources, self._format_resources_key(keys))
-        if sub:
+        if sub and isinstance(sub, str) :
             uri += "/{0}".format(sub)
+        else:
+            uri += ";out={0}".format(','.join([e for e in sub]))
 
         if self.use_login:
             uri = self._add_login(uri)
 
         return uri
+
+    def get_collections(self, resource_type, resources, sub_resources):
+        """Generic method to get collections
+        """
+        uri = self._build_uri(resource_type, resource_id, sub=sub_resources)
+        response = self._get(uri)
+        return response
 
     #################################
     #

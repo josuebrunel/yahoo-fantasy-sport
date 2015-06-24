@@ -18,15 +18,21 @@ class FantasySport(object):
     def __repr__(self,):
         return "<{0}> <{1}>".format(self.url, self.fmt)
 
+    def _check_token_validity(self,):
+        """Check wether or not the access token is still valid, if not, renews it
+        """
+        if not self.oauth.token_is_valid():
+            self.oauth.refresh_access_token
+        return True
+
     def _get(self, uri):
         """
         """
 
         if not self.oauth.oauth.base_url :
             self.oauth.oauth.base_url = self.url
-
-        if not self.oauth.token_is_valid():
-            self.oauth.refresh_access_token
+        
+        self._check_token_validity()
 
         response = self.oauth.session.get(uri, params={'format': self.fmt})
 

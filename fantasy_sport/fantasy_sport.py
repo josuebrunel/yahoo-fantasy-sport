@@ -18,15 +18,21 @@ class FantasySport(object):
     def __repr__(self,):
         return "<{0}> <{1}>".format(self.url, self.fmt)
 
+    def _check_token_validity(self,):
+        """Check wether or not the access token is still valid, if not, renews it
+        """
+        if not self.oauth.token_is_valid():
+            self.oauth.refresh_access_token
+        return True
+
     def _get(self, uri):
         """
         """
 
         if not self.oauth.oauth.base_url :
             self.oauth.oauth.base_url = self.url
-
-        if not self.oauth.token_is_valid():
-            self.oauth.refresh_access_token
+        
+        self._check_token_validity()
 
         response = self.oauth.session.get(uri, params={'format': self.fmt})
 
@@ -53,13 +59,22 @@ class FantasySport(object):
         """Build uri
         """
         uri = "{0}={1}".format(resources, self._format_resources_key(keys))
-        if sub:
+        if sub and isinstance(sub, str) :
             uri += "/{0}".format(sub)
+        if sub and not isinstance(sub, str):
+            uri += ";out={0}".format(','.join([e for e in sub]))
 
         if self.use_login:
             uri = self._add_login(uri)
 
         return uri
+
+    def get_collections(self, resource_type, resource_ids, sub_resources):
+        """Generic method to get collections
+        """
+        uri = self._build_uri(resource_type, resource_ids, sub=sub_resources)
+        response = self._get(uri)
+        return response
 
     #################################
     #

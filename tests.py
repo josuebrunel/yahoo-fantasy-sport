@@ -78,4 +78,8 @@ class TestFantasySport(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
+    def test_get_collections(self,):
+        response = self.yfs.get_collections('leagues;league_keys', ['238.l.627060','238.l.627062'],['settings','standings'])
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
 

@@ -12,5 +12,5 @@ fi
 
 #python -m unittest tests$TestCase$Test
 coverage run --source=fantasy_sport -m unittest tests$TestCase$Test
-
+coverage report
 

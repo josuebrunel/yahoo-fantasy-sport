@@ -54,7 +54,12 @@ class FantasySport(object):
         """Format resources keys 
         """
         return ','.join(str(e) for e in keys)
-
+        
+    def _format_player_filters(self, filters):
+        """Format player filters 
+        """
+        return ','.join(str(e) for e in filters)    
+        
     def _build_uri(self, resources, keys, sub=None):
         """Build uri
         """
@@ -111,6 +116,14 @@ class FantasySport(object):
         uri = self._build_uri('leagues;league_keys', league_keys, sub='teams')
         response = self._get(uri)
         return response
+        
+    def get_leagues_players(self, league_keys):
+        """Return leagues players
+        >>> yfs.get_leagues_teams(['238.l.627062'])
+        """
+        uri = self._build_uri('leagues;league_keys', league_keys, sub='players')
+        response = self._get(uri)
+        return response    
 
     def get_leagues_scoreboard(self, league_keys, week=None):
         """Return leagues scoreboard
@@ -162,10 +175,91 @@ class FantasySport(object):
     #           PLAYERS
     #
     ###################################
+    
+    def get_players(self, player_keys, filters=None):
+        """Return player data
+        >>> yfs.get_players(['player_key'])
+        """     
+        uri = self._build_uri('players;player_keys', player_keys)
+        
+        if filters:
+            uri += ';', self._format_player_filters(filters)
+        
+        response = self._get(uri)
+        return response
+    
 
     ###################################
     #
     #           TEAMS
     #   
     ###################################
-
+    
+    
+    def get_teams(self, team_keys):
+        """Return team data
+        >>> yfs.get_teams(['league_key'])
+        """     
+        uri = self._build_uri('teams;team_keys',team_keys)
+        response = self._get(uri)
+        return response
+        
+    def get_teams_players(self, team_keys):
+        """Return teams players
+        >>> yfs.get_teams_players(['238.l.627062'])
+        """
+        uri = self._build_uri('teams;team_keys', league_keys, sub='players')
+        response = self._get(uri)
+        return response        
+        
+    def get_teams_stats(self, team_keys, week=None):
+        """Return team stats
+        >>> yfs.get_teams_stats(['238.l.627062.t.1'], week=3)
+        """     
+        uri = self._build_uri('teams;team_keys',team_keys, sub='stats')
+        
+        if week:
+            uri += ';type=week;week={0}'.format(week)
+        
+        response = self._get(uri)
+        return response
+    
+    def get_teams_standings(self, team_keys):
+        """Return team standings
+        >>> yfs.get_teams_standings(['238.l.627062.t.1'])
+        """     
+        uri = self._build_uri('teams;team_keys',team_keys, sub='standings')
+        response = self._get(uri)
+        return response
+        
+    def get_teams_roster(self, team_keys, week=None):
+        """Return team roster
+        >>> yfs.get_teams_roster(['238.l.627062.t.1'], week=3)
+        """     
+        uri = self._build_uri('teams;team_keys',team_keys, sub='roster')
+        
+        if week:
+            uri += ';week={0}'.format(week)
+        
+        response = self._get(uri)
+        return response
+        
+    def get_teams_draftresults(self, team_keys):
+        """Return a team's draft results
+        >>> yfs.get_teams_draftresults(['238.l.627062.t.1'])
+        """     
+        uri = self._build_uri('teams;team_keys',team_keys, sub='draftresults')
+        response = self._get(uri)
+        return response
+        
+    def get_teams_matchups(self, team_keys, weeks=None):
+        """Return team matchups (H2H leagues only)
+        >>> yfs.get_teams_matchups(['238.l.627062.t.1'], weeks='1,3,6')
+        """     
+        uri = self._build_uri('teams;team_keys',team_keys, sub='matchups')
+        
+        if weeks:   
+            uri += ';weeks={0}'.format(weeks)    
+            
+        response = self._get(uri)
+        return response          

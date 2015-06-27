@@ -170,11 +170,11 @@ class FantasySport(object):
         return response
 
 
-    ###################################
+    #########################################
     #
-    #           PLAYERS
+    #       PLAYERS (not league specific)
     #
-    ###################################
+    #########################################
     
     def get_players(self, player_keys, filters=None):
         """Return player data
@@ -187,7 +187,34 @@ class FantasySport(object):
         
         response = self._get(uri)
         return response
-    
+        
+      def get_players_stats(self, player_keys, week=None):
+        """Return player stats (not league specific)
+        >>> yfs.get_players_stats([223.p.5479], week=3)
+        """     
+        uri = self._build_uri('players', player_keys, sub='stats')
+        
+        if week:
+            uri += ';type=week;week={0}'.format(week)
+        
+        response = self._get(uri)
+        return response
+        
+      def get_players_percent_owned(self, player_keys):
+        """Return ownership percentage of player (not league specific)
+        >>> yfs.get_players_percent_owned([223.p.5479])
+        """     
+        uri = self._build_uri('players', player_keys, sub='percent_owned')
+        response = self._get(uri)
+        return response
+          
+      def get_players_draft_analysis(self, player_keys):
+        """Return draft metrics for player (not league specific)
+        >>> yfs.get_players_draft_analysis([223.p.5479])
+        """     
+        uri = self._build_uri('players', player_keys, sub='draft_analysis')
+        response = self._get(uri)
+        return response
 
     ###################################
     #

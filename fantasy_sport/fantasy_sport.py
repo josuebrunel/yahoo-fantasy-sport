@@ -188,9 +188,9 @@ class FantasySport(object):
         response = self._get(uri)
         return response
         
-      def get_players_stats(self, player_keys, week=None):
+    def get_players_stats(self, player_keys, week=None):
         """Return player stats (not league specific)
-        >>> yfs.get_players_stats([223.p.5479], week=3)
+        >>> yfs.get_players_stats(['223.p.5479'], week=3)
         """     
         uri = self._build_uri('players', player_keys, sub='stats')
         
@@ -200,7 +200,7 @@ class FantasySport(object):
         response = self._get(uri)
         return response
         
-      def get_players_percent_owned(self, player_keys):
+    def get_players_percent_owned(self, player_keys):
         """Return ownership percentage of player (not league specific)
         >>> yfs.get_players_percent_owned([223.p.5479])
         """     
@@ -208,7 +208,7 @@ class FantasySport(object):
         response = self._get(uri)
         return response
           
-      def get_players_draft_analysis(self, player_keys):
+    def get_players_draft_analysis(self, player_keys):
         """Return draft metrics for player (not league specific)
         >>> yfs.get_players_draft_analysis([223.p.5479])
         """     
@@ -235,7 +235,7 @@ class FantasySport(object):
         """Return teams players
         >>> yfs.get_teams_players(['238.l.627062'])
         """
-        uri = self._build_uri('teams;team_keys', league_keys, sub='players')
+        uri = self._build_uri('teams;team_keys', team_keys, sub='players')
         response = self._get(uri)
         return response        
         
@@ -289,4 +289,28 @@ class FantasySport(object):
             uri += ';weeks={0}'.format(weeks)    
             
         response = self._get(uri)
-        return response          
+        return response
+        
+        
+        
+    ##############################################
+    #
+    #    ROSTERS (team specific player info)
+    #
+    ##############################################
+    
+             
+    def get_roster_players(self, team_keys, week=None, date=None, sub=None):
+        """Access roster info, with player sub option
+        >>> yfs.get_roster_players(['238.l.627062'])
+        """
+        
+        if sub == 'players':
+            uri = self._build_uri('teams', team_keys, sub=['roster','players'])
+        elif sub: 
+            uri = self._build_uri('teams', team_keys, sub='roster')
+        else:
+            uri = self._build_uri('teams', team_keys, sub='roster')
+            
+        response = self._get(uri)
+        return response 

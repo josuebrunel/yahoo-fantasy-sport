@@ -12,7 +12,17 @@
 ## Quickstart
 
 ```python
+>>> from yahoo_oauth import OAuth1
+>>> oauth = OAuth1(None, None, from_file='oauth.json')
+>>> from fantasy_sport import FantasySport
+>>> yfs = FantasySport(oauth, fmt='json')
 ```
+
+### Games Resources
+
+### Leagues Resources
+
+### Players Resources
 
 ## How to contribute
 

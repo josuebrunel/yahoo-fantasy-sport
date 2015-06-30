@@ -53,12 +53,7 @@ class FantasySport(object):
     def _format_resources_key(self, keys):
         """Format resources keys 
         """
-        return ','.join(str(e) for e in keys)
-        
-    def _format_player_filters(self, filters):
-        """Format player filters 
-        """
-        return ','.join(str(e) for e in filters)    
+        return ','.join(str(e) for e in keys) 
         
     def _build_uri(self, resources, keys, sub=None):
         """Build uri
@@ -182,9 +177,11 @@ class FantasySport(object):
         """     
         uri = self._build_uri('players;player_keys', player_keys)
         
-        if filters:
-            uri += ';', self._format_player_filters(filters)
-        
+        if filters and isinstance(filters, str):
+            uri += ';{0}'.format(filters)
+        if filters and not isinstance(filters, str):
+            uri += ";{0}".format(','.join([e for e in filters]))
+
         response = self._get(uri)
         return response
         
@@ -192,7 +189,7 @@ class FantasySport(object):
         """Return player stats (not league specific)
         >>> yfs.get_players_stats(['223.p.5479'], week=3)
         """     
-        uri = self._build_uri('players', player_keys, sub='stats')
+        uri = self._build_uri('players;player_keys', player_keys, sub='stats')
         
         if week:
             uri += ';type=week;week={0}'.format(week)
@@ -204,7 +201,7 @@ class FantasySport(object):
         """Return ownership percentage of player (not league specific)
         >>> yfs.get_players_percent_owned([223.p.5479])
         """     
-        uri = self._build_uri('players', player_keys, sub='percent_owned')
+        uri = self._build_uri('players;player_keys', player_keys, sub='percent_owned')
         response = self._get(uri)
         return response
           
@@ -212,7 +209,7 @@ class FantasySport(object):
         """Return draft metrics for player (not league specific)
         >>> yfs.get_players_draft_analysis([223.p.5479])
         """     
-        uri = self._build_uri('players', player_keys, sub='draft_analysis')
+        uri = self._build_uri('players;player_keys', player_keys, sub='draft_analysis')
         response = self._get(uri)
         return response
 
@@ -240,7 +237,7 @@ class FantasySport(object):
         return response        
         
     def get_teams_stats(self, team_keys, week=None):
-        """Return team stats
+        """Return team stats (week only for H2H league)
         >>> yfs.get_teams_stats(['238.l.627062.t.1'], week=3)
         """     
         uri = self._build_uri('teams;team_keys',team_keys, sub='stats')
@@ -259,14 +256,23 @@ class FantasySport(object):
         response = self._get(uri)
         return response
         
-    def get_teams_roster(self, team_keys, week=None):
+    def get_teams_roster(self, team_keys, week=None, players=None, filters=None):
         """Return team roster
         >>> yfs.get_teams_roster(['238.l.627062.t.1'], week=3)
         """     
         uri = self._build_uri('teams;team_keys',team_keys, sub='roster')
-        
+            
         if week:
             uri += ';week={0}'.format(week)
+        
+        if players and filters:
+            uri += '/players;{1}/{0}'.format(filters, players)
+            
+        elif filters and not players:
+            uri += '/players;{0}'.format(filters) 
+            
+        elif players and not filters:
+            uri += 'players/{0}'.format(players)   
         
         response = self._get(uri)
         return response
@@ -285,8 +291,10 @@ class FantasySport(object):
         """     
         uri = self._build_uri('teams;team_keys',team_keys, sub='matchups')
         
-        if weeks:   
+        if weeks and isinstance(weeks, str):   
             uri += ';weeks={0}'.format(weeks)    
+        if weeks and not isinstance(weeks, str):
+            uri += ";weeks{0}".format(','.join([e for e in weeks]))
             
         response = self._get(uri)
         return response
@@ -314,3 +322,24 @@ class FantasySport(object):
             
         response = self._get(uri)
         return response 
+        
+        
+    ##############################################
+    #
+    #    TRANSACTIONS
+    #
+    ##############################################
+    
+    def get_transactions(self, transaction_keys, players=None):
+        """Return transaction data
+        >>> yfs.get_transaction(['transaction_key'])
+        """ 
+        
+        if players:
+            subtext = 'players/{0}'.format(players)    
+            uri = self._build_uri('transactions;transaction_keys', transaction_keys, sub=subtext)
+        else:
+            uri = self._build_uri('transactions;transaction_keys', transaction_keys)
+            
+        response = self._get(uri)
+        return response

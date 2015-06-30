@@ -17,7 +17,7 @@ class TestFantasySport(unittest.TestCase):
     def setUp(self,):
         oauth = OAuth1(None, None, from_file='oauth.json',base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
         self.yfs = FantasySport(oauth)
-    """
+    
     def test_get_games_info(self,):
         response = self.yfs.get_games_info(['nfl'])
         self.assertEqual(response.status_code, 200)
@@ -29,9 +29,15 @@ class TestFantasySport(unittest.TestCase):
         self.yfs.use_login = False
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
+        
+class TestFantasySportLeague(unittest.TestCase):
+
+    def setUp(self,):
+        oauth = OAuth1(None, None, from_file='oauth.json',base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
+        self.yfs = FantasySport(oauth)
 
     def test_get_leagues(self):
-        response = self.yfs.get_leagues(['238.l.627060'])
+        response = self.yfs.get_leagues(['346.l.1328'])
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
@@ -81,10 +87,20 @@ class TestFantasySport(unittest.TestCase):
         response = self.yfs.get_collections('leagues;league_keys', ['238.l.627060','238.l.627062'],['settings','standings'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
-    """
-    """
+        
+class TestFantasySportPlayer(unittest.TestCase):
+
+    def setUp(self,):
+        oauth = OAuth1(None, None, from_file='oauth.json',base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
+        self.yfs = FantasySport(oauth)
+        
     def test_get_players(self,):
         response = self.yfs.get_players(['223.p.5479'])
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_playerswithfilter(self,):
+        response = self.yfs.get_players(['346.p.8180', '346.p.8544'], filters='position=P')
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
         
@@ -94,7 +110,7 @@ class TestFantasySport(unittest.TestCase):
         self.assertEqual(response.status_code, 200)    
         
     def test_get_players_draft_analysis(self,):
-        response = self.yfs.get_players_draft_analysis(['223.p.5479'])
+        response = self.yfs.get_players_draft_analysis(['346.p.8180'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
     
@@ -102,8 +118,13 @@ class TestFantasySport(unittest.TestCase):
         response = self.yfs.get_players_percent_owned(['346.p.8180'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
-    """
-    
+        
+class TestFantasySportTeam(unittest.TestCase):
+
+    def setUp(self,):
+        oauth = OAuth1(None, None, from_file='oauth.json',base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
+        self.yfs = FantasySport(oauth)
+        
     def test_get_teams(self,):
         response = self.yfs.get_teams(['346.l.1328.t.12'])
         logging.debug(pretty_json(response.content))
@@ -112,4 +133,41 @@ class TestFantasySport(unittest.TestCase):
     def test_get_teams_players(self,):
         response = self.yfs.get_teams_players(['346.l.1328.t.12'])
         logging.debug(pretty_json(response.content))
-        self.assertEqual(response.status_code, 200)  
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_stats(self,):
+        response = self.yfs.get_teams_stats(['238.l.627062.t.1'], week=10)
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_standings(self,):
+        response = self.yfs.get_teams_standings(['346.l.1328.t.12'])
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_roster(self,):
+        response = self.yfs.get_teams_roster(['346.l.1328.t.12'], players='draft_analysis', filters='position=3B')
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_draftresults(self,):
+        response = self.yfs.get_teams_draftresults(['346.l.1328.t.12'])
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_matchups(self,):
+        response = self.yfs.get_teams_matchups(['238.l.627062.t.1'], weeks=['1,2'])
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+class TestFantasySportTransaction(unittest.TestCase):
+
+    def setUp(self,):
+        oauth = OAuth1(None, None, from_file='oauth.json',base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
+        self.yfs = FantasySport(oauth)
+        
+    def test_get_transactions(self,):
+        response = self.yfs.get_transactions(['346.l.1328.tr.100'], players='draft_analysis')
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        

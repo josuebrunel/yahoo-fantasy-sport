@@ -110,12 +110,12 @@ class TestFantasySportPlayer(unittest.TestCase):
         self.assertEqual(response.status_code, 200)    
         
     def test_get_players_draft_analysis(self,):
-        response = self.yfs.get_players_draft_analysis(['346.p.8180'])
+        response = self.yfs.get_players_draft_analysis(['44.p.6619'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
     
     def test_get_players_percent_owned(self,):
-        response = self.yfs.get_players_percent_owned(['346.p.8180'])
+        response = self.yfs.get_players_percent_owned(['253.p.6619'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
         

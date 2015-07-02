@@ -272,7 +272,7 @@ class FantasySport(object):
             uri += '/players;{0}'.format(filters) 
             
         elif players and not filters:
-            uri += 'players/{0}'.format(players)   
+            uri += '/players/{0}'.format(players)   
         
         response = self._get(uri)
         return response

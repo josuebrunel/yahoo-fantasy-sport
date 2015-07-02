@@ -64,7 +64,7 @@ class TestFantasySportLeague(unittest.TestCase):
         logging.debug(pretty_json(response.content))
 
     def test_get_leagues_standings(self):
-        response = self.yfs.get_leagues_standings(['238.l.627060','238.l.627062'])
+        response = self.yfs.get_leagues_standings(['346.l.1328'])
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
 
@@ -146,10 +146,30 @@ class TestFantasySportTeam(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
     def test_get_teams_roster(self,):
-        response = self.yfs.get_teams_roster(['346.l.1328.t.12'], players='draft_analysis', filters='position=3B')
+        response = self.yfs.get_teams_roster(['346.l.1328.t.12'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
         
+    def test_get_teams_roster_week(self,):
+        response = self.yfs.get_teams_roster(['223.l.431.t.9'], week=1)
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_roster_weekplayer(self,):
+        response = self.yfs.get_teams_roster(['223.l.431.t.9'], week=1, players='draft_analysis')
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)    
+                
+    def test_get_teams_roster_players(self,):
+        response = self.yfs.get_teams_roster(['346.l.1328.t.12'], players='draft_analysis')
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_roster_filter(self,):
+        response = self.yfs.get_teams_roster(['346.l.1328.t.12'], filters='position=3B')
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+   
     def test_get_teams_draftresults(self,):
         response = self.yfs.get_teams_draftresults(['346.l.1328.t.12'])
         logging.debug(pretty_json(response.content))

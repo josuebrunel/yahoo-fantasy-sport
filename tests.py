@@ -149,6 +149,11 @@ class TestFantasySportTeam(unittest.TestCase):
         response = self.yfs.get_teams_roster(['346.l.1328.t.12'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
+
+    #def test_get_teams_roster_with_filter(self,):
+    #    response = self.yfs.get_teams_roster(['346.l.1328.t.12'], players='draft_analysis', filters='position=3B')
+    #    logging.debug(pretty_json(response.content))
+    #    self.assertEqual(response.status_code, 200)
         
     def test_get_teams_roster_week(self,):
         response = self.yfs.get_teams_roster(['223.l.431.t.9'], week=1)

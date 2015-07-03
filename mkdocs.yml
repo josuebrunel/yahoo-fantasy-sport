@@ -1,0 +1,11 @@
+site_name: Yahoo Fantasy Sport
+repo_url: https://github.com/josuebrunel/yahoo-fantasy-sport
+site_url: http://yahoo-fantasy-sport.readthedocs.org/en/latest/
+site_description: Yahoo Fantasy Sport Python Wrapper
+site_author: Josue Kouka
+pages:
+  - Home : index.md
+  - Team : team.md
+  - League : league.md
+  - Player : player.md
+theme: readthedocs

@@ -12,16 +12,33 @@ logging.getLogger('yahoo_oauth').setLevel(logging.WARNING)
 logging.basicConfig(level=logging.DEBUG,format="[%(asctime)s %(levelname)s] [%(name)s.%(module)s.%(funcName)s] %(message)s \n")
 logging.getLogger('test-fantasy-sports')
 
-class TestFantasySport(unittest.TestCase):
+class TestFantasySportGame(unittest.TestCase):
 
     def setUp(self,):
         oauth = OAuth1(None, None, from_file='oauth.json',base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
         self.yfs = FantasySport(oauth)
     
     def test_get_games_info(self,):
-        response = self.yfs.get_games_info(['nfl'])
+        response = self.yfs.get_games_info(['346'])
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
+        
+    def test_get_games_withleague(self,):
+        response = self.yfs.get_games_info(['328'], leagues='328.l.56628')
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+        
+    def test_get_games_withplayer(self,):
+        response = self.yfs.get_games_info(['328'], players='328.p.8180')
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
+        
+    def test_get_games_with_login_teams(self,):
+        self.yfs.use_login = True
+        response = self.yfs.get_games_info(['346'], teams=True)
+        self.yfs.use_login = False
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))          
         
     def test_get_games_info_with_login(self,):
         self.yfs.use_login = True

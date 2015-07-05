@@ -84,6 +84,11 @@ class TestFantasySportLeague(unittest.TestCase):
         response = self.yfs.get_leagues_standings(['346.l.1328'])
         self.assertEqual(response.status_code, 200)
         logging.debug(pretty_json(response.content))
+        
+    def test_get_leagues_standings_withteam_androsterplayers(self):
+        response = self.yfs.get_leagues_standings(['346.l.1328'], teams='roster', players='ownership')
+        self.assertEqual(response.status_code, 200)
+        logging.debug(pretty_json(response.content))
 
     def test_get_leagues_transactions(self):
         response = self.yfs.get_leagues_transactions(['238.l.627060','238.l.627062'])

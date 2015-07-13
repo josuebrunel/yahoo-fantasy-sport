@@ -1,4 +1,5 @@
 import pdb
+import json
 import logging
 import unittest
 
@@ -209,8 +210,11 @@ class TestPlayer(unittest.TestCase):
 
     def test_player_in_xml(self,):
         expected = ctree.fromstring('<player><player_key>242.p.8332</player_key><position>WR</position></player>')
+        logging.debug(pretty_xml(self.player.to_xml()))
         self.assertEqual(expected, self.player.xml)
 
     def test_player_in_json(self,):
-        expected = {"player_key": "242.p.8332","position":"WR"}
+        expected = json.dumps({"player_key": "242.p.8332","position":"WR"}, sort_keys=True)
+        logging.debug(pretty_json(self.player.json))
         self.assertEqual(expected, self.player.json)
+

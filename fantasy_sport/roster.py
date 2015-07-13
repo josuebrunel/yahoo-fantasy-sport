@@ -3,6 +3,9 @@ from __future__ import absolute_import
 import json
 from xml.etree import cElementTree as ctree
 
+class Roster(object):
+    pass
+
 class Player(object):
     """Roster player class
     - player_key
@@ -30,20 +33,20 @@ class Player(object):
     def __json_builder(self, ):
         """Kind of convert object to json
         """
-        self.json = {
+        self.json = json.dumps({
             'player_key': self.player_key,
             'position': self.position
-        } 
-        
+        }, sort_keys=True)
+
         return self.json
 
     def to_json(self,):
         """Return object as a json string
         """
-        return str(self.json)
+        return json.loads(self.json)
 
 
     def to_xml(self):
         """Return object as a xml string
         """
-        return ctree.tostring(self.xml)
+        return ctree.tostring(self.xml, encoding='utf-8')

@@ -175,6 +175,12 @@ class TestFantasySportRoster(unittest.TestCase):
         response = self.yfs.get_roster_players(['346.l.1328.t.12'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
+
+    def test_get_roster_players_by_week(self,):
+        response = self.yfs.get_roster_players(['346.l.1328.t.12'], week=10)
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
         
 class TestFantasySportTransaction(unittest.TestCase):
 

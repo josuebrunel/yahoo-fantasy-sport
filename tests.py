@@ -209,9 +209,9 @@ class TestPlayer(unittest.TestCase):
         self.player = Player('242.p.8332','WR')
 
     def test_player_in_xml(self,):
-        expected = ctree.fromstring('<player><player_key>242.p.8332</player_key><position>WR</position></player>')
+        expected = '<player><player_key>242.p.8332</player_key><position>WR</position></player>'
         logging.debug(pretty_xml(self.player.to_xml()))
-        self.assertEqual(expected, self.player.xml)
+        self.assertEqual(expected, self.player.to_xml())
 
     def test_player_in_json(self,):
         expected = json.dumps({"player_key": "242.p.8332","position":"WR"}, sort_keys=True)

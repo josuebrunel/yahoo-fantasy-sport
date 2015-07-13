@@ -23,11 +23,14 @@ class Player(object):
     def __xml_builder(self,):
         """Convert object into a xml object
         """
-        self.xml = ctree.Element('player')
-        for key, value in vars(self).items():
-            tag = ctree.SubElement(self.xml, key)
-            tag.text = value
-
+        player = ctree.Element('player')
+        #for key, value in vars(self).items():
+        for key in sorted(vars(self).keys()):
+            tag = ctree.SubElement(player, key)
+            #tag.text = value
+            tag.text = vars(self).get(key)
+        
+        self.xml = player
         return self.xml
 
     def __json_builder(self, ):
@@ -49,4 +52,5 @@ class Player(object):
     def to_xml(self):
         """Return object as a xml string
         """
-        return ctree.tostring(self.xml, encoding='utf-8')
+        return ctree.tostring(self.xml)
+

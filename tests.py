@@ -1,10 +1,14 @@
 import pdb
+import json
 import logging
 import unittest
+
+from xml.etree import cElementTree as ctree
 
 from yahoo_oauth import OAuth1
 
 from fantasy_sport import FantasySport
+from fantasy_sport.roster import Player
 from fantasy_sport.utils import pretty_json, pretty_xml
 
 logging.getLogger('yahoo_oauth').setLevel(logging.WARNING)
@@ -198,3 +202,19 @@ class TestFantasySportTransaction(unittest.TestCase):
         #logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
         
+
+class TestPlayer(unittest.TestCase):
+
+    def setUp(self,):
+        self.player = Player('242.p.8332','WR')
+
+    def test_player_in_xml(self,):
+        expected = '<player><player_key>242.p.8332</player_key><position>WR</position></player>'
+        logging.debug(pretty_xml(self.player.to_xml()))
+        self.assertEqual(expected, self.player.to_xml())
+
+    def test_player_in_json(self,):
+        expected = json.dumps({"player_key": "242.p.8332","position":"WR"}, sort_keys=True)
+        logging.debug(pretty_json(self.player.json))
+        self.assertEqual(expected, self.player.json)
+

@@ -20,7 +20,7 @@ $ pip install yahoo-fantasy-sport
 
 ```python
 >>> from yahoo_oauth import OAuth1
->>> oauth = OAuth1(None, None, from_file='oauth.json')
+>>> oauth = OAuth1(None, None, from_file='oauth.json', base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
 >>> from fantasy_sport import FantasySport
 >>> yfs = FantasySport(oauth, fmt='json')
 ```

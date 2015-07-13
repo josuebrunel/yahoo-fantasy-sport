@@ -2,7 +2,7 @@ import pdb
 import logging
 import unittest
 
-from yahoo_oauth import OAuth2, OAuth1
+from yahoo_oauth import OAuth1
 
 from fantasy_sport import FantasySport
 from fantasy_sport.utils import pretty_json, pretty_xml
@@ -162,6 +162,17 @@ class TestFantasySportTeam(unittest.TestCase):
         
     def test_get_teams_matchups(self,):
         response = self.yfs.get_teams_matchups(['238.l.627062.t.1'], weeks=['1,2'])
+        logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+
+class TestFantasySportRoster(unittest.TestCase):
+
+    def setUp(self,):
+        oauth = OAuth1(None, None, from_file='oauth.json', base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
+        self.yfs = FantasySport(oauth)
+
+    def test_get_roster_players(self,):
+        response = self.yfs.get_roster_players(['346.l.1328.t.12'])
         logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
         

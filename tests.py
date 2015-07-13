@@ -5,6 +5,7 @@ import unittest
 from yahoo_oauth import OAuth1
 
 from fantasy_sport import FantasySport
+from fantasy_sport.roster import Player
 from fantasy_sport.utils import pretty_json, pretty_xml
 
 logging.getLogger('yahoo_oauth').setLevel(logging.WARNING)
@@ -198,3 +199,10 @@ class TestFantasySportTransaction(unittest.TestCase):
         #logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
         
+
+class TestPlayer(unittest.TestCase):
+
+    def test_player_in_xml(self,):
+        player = Player('242.p.8332','WR')
+        expected='<player><player_key>242.p.8332</player_key><position>WR</position></player>'
+        self.assertEqual(expected, player.to_xml())

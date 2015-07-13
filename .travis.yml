@@ -10,11 +10,7 @@ install:
 - pip install -r requirements.txt
 - pip install coverage coveralls
 script:
-- coverage run --source=fantasy_sport -m unittest tests.TestFantasySportLeague
-- coverage run --source=fantasy_sport -m unittest tests.TestFantasySportPlayer
-- coverage run --source=fantasy_sport -m unittest tests.TestFantasySportTeam
-- coverage run --source=fantasy_sport -m unittest tests.TestFantasySportRoster
-- coverage run --source=fantasy_sport -m unittest tests.TestFantasySportTransaction
+- coverage run --source=fantasy_sport -m unittest discover
 after_success:
 - coverage report
 - coveralls

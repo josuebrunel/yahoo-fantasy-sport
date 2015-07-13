@@ -2,6 +2,8 @@ import pdb
 import logging
 import unittest
 
+from xml.etree import cElementTree as ctree
+
 from yahoo_oauth import OAuth1
 
 from fantasy_sport import FantasySport
@@ -202,7 +204,13 @@ class TestFantasySportTransaction(unittest.TestCase):
 
 class TestPlayer(unittest.TestCase):
 
+    def setUp(self,):
+        self.player = Player('242.p.8332','WR')
+
     def test_player_in_xml(self,):
-        player = Player('242.p.8332','WR')
-        expected='<player><player_key>242.p.8332</player_key><position>WR</position></player>'
-        self.assertEqual(expected, player.to_xml())
+        expected = ctree.fromstring('<player><player_key>242.p.8332</player_key><position>WR</position></player>')
+        self.assertEqual(expected, self.player.xml)
+
+    def test_player_in_json(self,):
+        expected = {"player_key": "242.p.8332","position":"WR"}
+        self.assertEqual(expected, self.player.json)

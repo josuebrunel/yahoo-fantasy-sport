@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 
 import json
 from xml.etree import cElementTree as ctree
@@ -39,7 +39,7 @@ class Player(object):
         self.json = json.dumps({
             'player_key': self.player_key,
             'position': self.position
-        }, sort_keys=True)
+        }, sort_keys=True, ensure_ascii=False).encode('ascii')
 
         return self.json
 

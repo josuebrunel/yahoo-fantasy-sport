@@ -218,3 +218,12 @@ class TestPlayer(unittest.TestCase):
         logging.debug(pretty_json(self.player.json))
         self.assertEqual(expected.encode('ascii'), self.player.json)
 
+
+class TestRoster(unittest.TestCase):
+
+    def setUp(self,):
+        players = [Player('242.p.8332', 'WR'), Player('242.p.8334','WL')]
+        self.roster = Roster('date', players, '2015-01-01')
+
+    def test_roster_in_json(self,):
+        expected = json.dumps({'coverage_type':'date','date':'2015-01-01','players':[{"player_key": "242.p.8332","position":"WR"},{"player_key": "242.p.8334","position":"LR"}]})

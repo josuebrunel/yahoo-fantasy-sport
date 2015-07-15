@@ -38,7 +38,7 @@ class FantasySport(object):
 
         return response
 
-    def _post(self, uri, data={}):
+    def _put(self, uri, data={}):
         """
         """
         pass
@@ -58,7 +58,11 @@ class FantasySport(object):
     def _build_uri(self, resources, keys, sub=None):
         """Build uri
         """
-        uri = "{0}={1}".format(resources, self._format_resources_key(keys))
+        if resources:
+            uri = "{0}={1}".format(resources, self._format_resources_key(keys))
+        else:
+           uri = '{0}'.format(self._format_resources_key(keys))
+        
         if sub and isinstance(sub, str) :
             uri += "/{0}".format(sub)
         if sub and not isinstance(sub, str):
@@ -101,6 +105,7 @@ class FantasySport(object):
         response = self._get(uri)
 
         return response
+
 
     ####################################
     #

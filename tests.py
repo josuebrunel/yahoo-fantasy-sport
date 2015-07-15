@@ -2,7 +2,7 @@ import pdb
 import logging
 import unittest
 
-from yahoo_oauth import OAuth2, OAuth1
+from yahoo_oauth import OAuth1
 
 from fantasy_sport import FantasySport
 from fantasy_sport.utils import pretty_json, pretty_xml

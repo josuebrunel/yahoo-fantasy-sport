@@ -214,9 +214,9 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(expected, self.player.to_xml())
 
     def test_player_in_json(self,):
-        expected = json.dumps({"player_key": "242.p.8332","position":"WR"}, sort_keys=True)
-        logging.debug(pretty_json(self.player.json))
-        self.assertEqual(expected.encode('ascii'), self.player.json)
+        expected = {"player_key": "242.p.8332","position":"WR"}
+        logging.debug(pretty_json(self.player.to_json()))
+        self.assertEqual(expected, self.player.json)
 
 
 class TestRoster(unittest.TestCase):

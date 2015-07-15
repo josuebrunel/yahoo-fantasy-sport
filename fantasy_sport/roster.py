@@ -4,10 +4,39 @@ import json
 from xml.etree import cElementTree as ctree
 
 class Roster(object):
-    pass
+    """Roster class
+    """
+
+    def __init__(self, players, week=None, date=None):
+        """Initialize a roster class
+        """
+        self.players = players
+
+        if week:
+            self.coverage = week
+            self.coverage_type = 'week'
+        else:
+            self.coverage = date
+            self.coverage_type = 'date'
+
+        self.__json_builder()
+
+    def __json_builder(self,):
+        """Convert object to json
+        """
+        self.json = {
+            'fantasy_content':{
+                'roster':{
+                    'coverage_type': self.coverage_type,
+                    self.coverage_type : self.coverage,
+                }
+            }
+        }
+
+        #self.json = json.dumps(data, ensure_ascii=True).encode('ascii')
 
 class Player(object):
-    """Roster player class
+    """player class
     - player_key
     - position
     """
@@ -36,17 +65,17 @@ class Player(object):
     def __json_builder(self, ):
         """Kind of convert object to json
         """
-        self.json = json.dumps({
+        self.json = {
             'player_key': self.player_key,
             'position': self.position
-        }, sort_keys=True, ensure_ascii=False).encode('ascii')
+        }
 
         return self.json
 
     def to_json(self,):
         """Return object as a json string
         """
-        return json.loads(self.json)
+        return json.dumps(self.json).encode('ascii')
 
 
     def to_xml(self):

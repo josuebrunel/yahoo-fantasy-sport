@@ -240,3 +240,8 @@ class TestRoster(unittest.TestCase):
         }
         logging.debug(pretty_json(self.roster.to_json()))
         self.assertEqual(expected, self.roster.json)
+
+    def test_roster_in_xml(self,):
+        expected = b'<fantasy_content><roster><coverage_type>date</coverage_type><date>2015-01-01</date><players><player><player_key>242.p.8332</player_key><position>WR</position></player><player><player_key>242.p.8334</player_key><position>LR</position></player></players></roster></fantasy_content>'
+        logging.debug(pretty_xml(self.roster.to_xml()))
+        self.assertEqual(expected, self.roster.to_xml())

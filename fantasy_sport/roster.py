@@ -20,6 +20,25 @@ class Roster(object):
             self.coverage_type = 'date'
 
         self.__json_builder()
+        self.__xml_builder()
+
+    def __xml_builder(self,):
+        """Convert object to xml
+        """
+        content = ctree.Element('fantasy_content')
+        roster = ctree.SubElement(content, 'roster')
+
+        coverage_type = ctree.SubElement(roster, 'coverage_type')
+        coverage_type.text = self.coverage_type
+
+        coverage = ctree.SubElement(roster, self.coverage_type)
+        coverage.text = self.coverage
+
+        players = ctree.SubElement(roster, 'players')
+        for player in self.players :
+            players.append(player.xml)
+
+        self.xml = content
 
     def __json_builder(self,):
         """Convert object to json
@@ -33,12 +52,17 @@ class Roster(object):
                 }
             }
         }
-
+        return self.json
     
     def to_json(self):
         """Return object as a json string
         """
         return json.dumps(self.json, ensure_ascii=True).encode('ascii')
+
+    def to_xml(self,):
+        """Return object as a xml string
+        """
+        return ctree.tostring(self.xml)
 
 class Player(object):
     """player class
@@ -58,10 +82,8 @@ class Player(object):
         """Convert object into a xml object
         """
         player = ctree.Element('player')
-        #for key, value in vars(self).items():
         for key in sorted(vars(self).keys()):
             tag = ctree.SubElement(player, key)
-            #tag.text = value
             tag.text = vars(self).get(key)
         
         self.xml = player

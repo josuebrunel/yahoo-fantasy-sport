@@ -1,15 +1,42 @@
 from __future__ import absolute_import, unicode_literals
 
+import six
+import abc
 import json
 from xml.etree import cElementTree as ctree
 
-class Roster(object):
+@six.add_metaclass(abc.ABCMeta)
+class Base(object):
+    """Base class for Roster and Player
+    """
+    @abc.abstractmethod
+    def __xml_builder(self,):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def __json_builder(self,):
+        raise NotImplementedError
+   
+    def to_json(self,):
+        """Return object as a json string
+        """
+        return json.dumps(self.json, ensure_ascii=True).encode('ascii')
+
+    def to_xml(self,):
+        """Return object as a xml string
+        """
+        return ctree.tostring(self.xml)
+
+
+class Roster(Base):
     """Roster class
     """
 
     def __init__(self, players, week=None, date=None):
         """Initialize a roster class
         """
+        super(Base, self).__init__()
+
         self.players = players
 
         if week:
@@ -54,17 +81,8 @@ class Roster(object):
         }
         return self.json
     
-    def to_json(self):
-        """Return object as a json string
-        """
-        return json.dumps(self.json, ensure_ascii=True).encode('ascii')
 
-    def to_xml(self,):
-        """Return object as a xml string
-        """
-        return ctree.tostring(self.xml)
-
-class Player(object):
+class Player(Base):
     """player class
     - player_key
     - position
@@ -73,6 +91,8 @@ class Player(object):
     def __init__(self, player_key, position):
         """Initialize a player object
         """
+        super(Base, self).__init__()
+
         self.player_key = player_key
         self.position = position
         self.__xml_builder()
@@ -98,15 +118,4 @@ class Player(object):
         }
 
         return self.json
-
-    def to_json(self,):
-        """Return object as a json string
-        """
-        return json.dumps(self.json).encode('ascii')
-
-
-    def to_xml(self):
-        """Return object as a xml string
-        """
-        return ctree.tostring(self.xml)
 

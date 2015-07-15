@@ -1,10 +1,14 @@
 import pdb
+import json
 import logging
 import unittest
+
+from xml.etree import cElementTree as ctree
 
 from yahoo_oauth import OAuth1
 
 from fantasy_sport import FantasySport
+from fantasy_sport.roster import Player, Roster
 from fantasy_sport.utils import pretty_json, pretty_xml
 
 logging.getLogger('yahoo_oauth').setLevel(logging.WARNING)
@@ -198,3 +202,46 @@ class TestFantasySportTransaction(unittest.TestCase):
         #logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
         
+
+class TestPlayer(unittest.TestCase):
+
+    def setUp(self,):
+        self.player = Player('242.p.8332','WR')
+
+    def test_player_in_xml(self,):
+        expected = b'<player><player_key>242.p.8332</player_key><position>WR</position></player>'
+        logging.debug(pretty_xml(self.player.to_xml()))
+        self.assertEqual(expected, self.player.to_xml())
+
+    def test_player_in_json(self,):
+        expected = {"player_key": "242.p.8332","position":"WR"}
+        logging.debug(pretty_json(self.player.to_json()))
+        self.assertEqual(expected, self.player.json)
+
+
+class TestRoster(unittest.TestCase):
+
+    def setUp(self,):
+        players = [Player('242.p.8332', 'WR'), Player('242.p.8334','LR')]
+        self.roster = Roster(players, date='2015-01-01')
+
+    def test_roster_in_json(self,):
+        expected = {
+            'fantasy_content': {
+                'roster': {
+                    'coverage_type':'date',
+                    'date':'2015-01-01',
+                    'players':[
+                        {"player_key": "242.p.8332","position":"WR"},
+                        {"player_key": "242.p.8334","position":"LR"}
+                    ]
+                }
+            }
+        }
+        logging.debug(pretty_json(self.roster.to_json()))
+        self.assertEqual(expected, self.roster.json)
+
+    def test_roster_in_xml(self,):
+        expected = b'<fantasy_content><roster><coverage_type>date</coverage_type><date>2015-01-01</date><players><player><player_key>242.p.8332</player_key><position>WR</position></player><player><player_key>242.p.8334</player_key><position>LR</position></player></players></roster></fantasy_content>'
+        logging.debug(pretty_xml(self.roster.to_xml()))
+        self.assertEqual(expected, self.roster.to_xml())

@@ -8,7 +8,7 @@ from xml.etree import cElementTree as ctree
 from yahoo_oauth import OAuth1
 
 from fantasy_sport import FantasySport
-from fantasy_sport.roster import Player
+from fantasy_sport.roster import Player, Roster
 from fantasy_sport.utils import pretty_json, pretty_xml
 
 logging.getLogger('yahoo_oauth').setLevel(logging.WARNING)
@@ -222,8 +222,21 @@ class TestPlayer(unittest.TestCase):
 class TestRoster(unittest.TestCase):
 
     def setUp(self,):
-        players = [Player('242.p.8332', 'WR'), Player('242.p.8334','WL')]
-        self.roster = Roster('date', players, '2015-01-01')
+        players = [Player('242.p.8332', 'WR'), Player('242.p.8334','LR')]
+        self.roster = Roster(players, date='2015-01-01')
 
     def test_roster_in_json(self,):
-        expected = json.dumps({'coverage_type':'date','date':'2015-01-01','players':[{"player_key": "242.p.8332","position":"WR"},{"player_key": "242.p.8334","position":"LR"}]})
+        expected = {
+            'fantasy_content': {
+                'roster': {
+                    'coverage_type':'date',
+                    'date':'2015-01-01',
+                    'players':[
+                        {"player_key": "242.p.8332","position":"WR"},
+                        {"player_key": "242.p.8334","position":"LR"}
+                    ]
+                }
+            }
+        }
+        logging.debug(pretty_json(self.roster.to_json()))
+        self.assertEqual(expected, self.roster.json)

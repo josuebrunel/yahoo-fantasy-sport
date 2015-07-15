@@ -29,11 +29,16 @@ class Roster(object):
                 'roster':{
                     'coverage_type': self.coverage_type,
                     self.coverage_type : self.coverage,
+                    'players': [ player.json for player in self.players ]
                 }
             }
         }
 
-        #self.json = json.dumps(data, ensure_ascii=True).encode('ascii')
+    
+    def to_json(self):
+        """Return object as a json string
+        """
+        return json.dumps(self.json, ensure_ascii=True).encode('ascii')
 
 class Player(object):
     """player class

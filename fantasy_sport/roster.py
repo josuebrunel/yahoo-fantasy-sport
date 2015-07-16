@@ -3,17 +3,19 @@ from __future__ import absolute_import, unicode_literals
 import six
 import abc
 import json
+
 from xml.etree import cElementTree as ctree
 
 @six.add_metaclass(abc.ABCMeta)
 class Base(object):
     """Base class for Roster and Player
     """
-    @abc.abstractmethod
+
+    #@abc.abstractmethod
     def __xml_builder(self,):
         raise NotImplementedError
 
-    @abc.abstractmethod
+    #@abc.abstractmethod
     def __json_builder(self,):
         raise NotImplementedError
    

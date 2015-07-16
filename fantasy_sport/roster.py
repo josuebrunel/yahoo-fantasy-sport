@@ -1,15 +1,44 @@
 from __future__ import absolute_import, unicode_literals
 
+import six
+import abc
 import json
+
 from xml.etree import cElementTree as ctree
 
-class Roster(object):
+@six.add_metaclass(abc.ABCMeta)
+class Base(object):
+    """Base class for Roster and Player
+    """
+
+    @abc.abstractmethod
+    def xml_builder(self,):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def json_builder(self,):
+        raise NotImplementedError
+   
+    def to_json(self,):
+        """Return object as a json string
+        """
+        return json.dumps(self.json, ensure_ascii=True).encode('ascii')
+
+    def to_xml(self,):
+        """Return object as a xml string
+        """
+        return ctree.tostring(self.xml)
+
+
+class Roster(Base):
     """Roster class
     """
 
     def __init__(self, players, week=None, date=None):
         """Initialize a roster class
         """
+        super(Base, self).__init__()
+
         self.players = players
 
         if week:
@@ -19,10 +48,10 @@ class Roster(object):
             self.coverage = date
             self.coverage_type = 'date'
 
-        self.__json_builder()
-        self.__xml_builder()
+        self.json_builder()
+        self.xml_builder()
 
-    def __xml_builder(self,):
+    def xml_builder(self,):
         """Convert object to xml
         """
         content = ctree.Element('fantasy_content')
@@ -40,7 +69,7 @@ class Roster(object):
 
         self.xml = content
 
-    def __json_builder(self,):
+    def json_builder(self,):
         """Convert object to json
         """
         self.json = {
@@ -54,17 +83,8 @@ class Roster(object):
         }
         return self.json
     
-    def to_json(self):
-        """Return object as a json string
-        """
-        return json.dumps(self.json, ensure_ascii=True).encode('ascii')
 
-    def to_xml(self,):
-        """Return object as a xml string
-        """
-        return ctree.tostring(self.xml)
-
-class Player(object):
+class Player(Base):
     """player class
     - player_key
     - position
@@ -73,12 +93,14 @@ class Player(object):
     def __init__(self, player_key, position):
         """Initialize a player object
         """
+        super(Base, self).__init__()
+
         self.player_key = player_key
         self.position = position
-        self.__xml_builder()
-        self.__json_builder()
+        self.xml_builder()
+        self.json_builder()
 
-    def __xml_builder(self,):
+    def xml_builder(self,):
         """Convert object into a xml object
         """
         player = ctree.Element('player')
@@ -89,7 +111,7 @@ class Player(object):
         self.xml = player
         return self.xml
 
-    def __json_builder(self, ):
+    def json_builder(self, ):
         """Kind of convert object to json
         """
         self.json = {
@@ -98,15 +120,4 @@ class Player(object):
         }
 
         return self.json
-
-    def to_json(self,):
-        """Return object as a json string
-        """
-        return json.dumps(self.json).encode('ascii')
-
-
-    def to_xml(self):
-        """Return object as a xml string
-        """
-        return ctree.tostring(self.xml)
 

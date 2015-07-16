@@ -11,12 +11,12 @@ class Base(object):
     """Base class for Roster and Player
     """
 
-    #@abc.abstractmethod
-    def __xml_builder(self,):
+    @abc.abstractmethod
+    def xml_builder(self,):
         raise NotImplementedError
 
-    #@abc.abstractmethod
-    def __json_builder(self,):
+    @abc.abstractmethod
+    def json_builder(self,):
         raise NotImplementedError
    
     def to_json(self,):
@@ -48,10 +48,10 @@ class Roster(Base):
             self.coverage = date
             self.coverage_type = 'date'
 
-        self.__json_builder()
-        self.__xml_builder()
+        self.json_builder()
+        self.xml_builder()
 
-    def __xml_builder(self,):
+    def xml_builder(self,):
         """Convert object to xml
         """
         content = ctree.Element('fantasy_content')
@@ -69,7 +69,7 @@ class Roster(Base):
 
         self.xml = content
 
-    def __json_builder(self,):
+    def json_builder(self,):
         """Convert object to json
         """
         self.json = {
@@ -97,10 +97,10 @@ class Player(Base):
 
         self.player_key = player_key
         self.position = position
-        self.__xml_builder()
-        self.__json_builder()
+        self.xml_builder()
+        self.json_builder()
 
-    def __xml_builder(self,):
+    def xml_builder(self,):
         """Convert object into a xml object
         """
         player = ctree.Element('player')
@@ -111,7 +111,7 @@ class Player(Base):
         self.xml = player
         return self.xml
 
-    def __json_builder(self, ):
+    def json_builder(self, ):
         """Kind of convert object to json
         """
         self.json = {

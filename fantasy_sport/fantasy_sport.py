@@ -62,7 +62,7 @@ class FantasySport(object):
             uri = "{0}={1}".format(resources, self._format_resources_key(keys))
         else:
            uri = '{0}'.format(self._format_resources_key(keys))
-        
+
         if sub and isinstance(sub, str) :
             uri += "/{0}".format(sub)
         if sub and not isinstance(sub, str):
@@ -330,19 +330,18 @@ class FantasySport(object):
     #
     ##############################################
     
-             
-    def get_roster_players(self, team_keys, week=None, date=None, sub=None):
+    def get_roster_players(self, team_keys, week=None, date=None):
         """Access roster info, with player sub option
         >>> yfs.get_roster_players(['238.l.627062'])
         """
+        uri = self._build_uri(None, team_keys, sub='roster/players')
+        uri = 'team/{0}'.format(uri) # Done to avoid having 'team=238.l.627062', which doesn't work for this resource
+
+        if week: 
+            uri += ';week={0}'.format(week)
+        if date:
+            uri += ';date={0}'.format(date)
         
-        if sub == 'players':
-            uri = self._build_uri('teams', team_keys, sub=['roster','players'])
-        elif sub: 
-            uri = self._build_uri('teams', team_keys, sub='roster')
-        else:
-            uri = self._build_uri('teams', team_keys, sub='roster')
-            
         response = self._get(uri)
         return response 
         

@@ -38,10 +38,16 @@ class FantasySport(object):
 
         return response
 
-    def _put(self, uri, data={}):
+    def _put(self, uri, roster):
         """
+        - uri : roster resource uri
+        - roster : roster object
         """
-        pass
+        headers = {'Content-Type':'application/{0}'.self.fmt}
+        data = roster.to_json() if self.fmt == 'json' else roster.to_xml() # Getting roster xml or json according to self.fmt
+
+        response = self.oauth.session.put(uri, data=data, headers=headers)
+
 
     def _add_login(self, uri):
         """Add users;use_login=1/ to the uri
@@ -324,6 +330,20 @@ class FantasySport(object):
             uri += ';date={0}'.format(date)
         
         response = self._get(uri)
+        return response 
+
+    def set_roster_players(self, team_keys, roster):
+        """
+        >>> from fantasy_sport import Roster, Player
+        >>> p1 = Player('242.p.8332','WR')
+        >>> p2 = Player('242.p.8334','WL')
+        >>> roster = Roster([p1, p2], date='2015-01-11')
+        >>> ysf.set_roster_players(['238.l.627062'], roster)
+        """
+        uri = self._build_uri(None, team_keys, sub='roster/players')
+        uri = 'team/{0}'.format(uri)
+
+        response = self._put(uri, roster)
         return response 
         
         

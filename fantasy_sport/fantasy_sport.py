@@ -67,7 +67,7 @@ class FantasySport(object):
         if resources:
             uri = "{0}={1}".format(resources, self._format_resources_key(keys))
         else:
-            uri = '{0}'.format(self._format_resources_key(keys))
+           uri = '{0}'.format(self._format_resources_key(keys))
 
         if sub and isinstance(sub, str) :
             uri += "/{0}".format(sub)
@@ -92,14 +92,26 @@ class FantasySport(object):
     #
     #################################
 
-    def get_games_info(self, game_keys):
+    def get_games_info(self, game_keys, leagues=None, teams=False, players=None):
         """Return game info
         >>> yfs.get_games_info('mlb')
+        Must set use_login to True to pull teams data
         """
         uri = self._build_uri('games;game_keys', game_keys)
+        
+        if leagues:
+            uri += '/leagues;league_keys={0}'.format(leagues)
+        
+        if teams:
+            uri += '/teams'
+            
+        if players:
+            uri += '/players;player_keys={0}'.format(players)
+            
         response = self._get(uri)
 
         return response
+
 
     ####################################
     #
@@ -150,11 +162,18 @@ class FantasySport(object):
         response = self._get(uri)
         return response
 
-    def get_leagues_standings(self, league_keys):
+    def get_leagues_standings(self, league_keys, teams=None, players=None):
         """Return leagues settings
         >>> yfs.get_leagues_settings(['238.l.627062','238.l.627062'])
         """
         uri = self._build_uri('leagues;league_keys', league_keys, sub='standings')
+        
+        if teams:
+            uri += '/teams/{0}'.format(teams)
+            
+        if teams=='roster' and players:
+            uri += '/players/{0}'.format(players)
+        
         response = self._get(uri)
         return response
 
@@ -282,7 +301,7 @@ class FantasySport(object):
             uri += '/players;{0}'.format(filters) 
             
         elif players and not filters:
-            uri += 'players/{0}'.format(players)   
+            uri += '/players/{0}'.format(players)   
         
         response = self._get(uri)
         return response

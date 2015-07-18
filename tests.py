@@ -16,22 +16,40 @@ logging.getLogger('yahoo_oauth').setLevel(logging.WARNING)
 logging.basicConfig(level=logging.DEBUG,format="[%(asctime)s %(levelname)s] [%(name)s.%(module)s.%(funcName)s] %(message)s \n")
 logging.getLogger('test-fantasy-sports')
 
-class TestFantasySport(unittest.TestCase):
+class TestFantasySportGame(unittest.TestCase):
 
     def setUp(self,):
         oauth = OAuth1(None, None, from_file='oauth.json',base_url='http://fantasysports.yahooapis.com/fantasy/v2/')
         self.yfs = FantasySport(oauth)
     
     def test_get_games_info(self,):
-        response = self.yfs.get_games_info(['nfl'])
-        logging.debug(pretty_json(response.content))
+        response = self.yfs.get_games_info(['346'])
+        #response = self.yfs.get_games_info(['nfl'])
+        #logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
+        
+    def test_get_games_withleague(self,):
+        response = self.yfs.get_games_info(['328'], leagues='328.l.56628')
+        self.assertEqual(response.status_code, 200)
+        #logging.debug(pretty_json(response.content))
+        
+    def test_get_games_withplayer(self,):
+        response = self.yfs.get_games_info(['328'], players='328.p.8180')
+        self.assertEqual(response.status_code, 200)
+        #logging.debug(pretty_json(response.content))
+        
+    def test_get_games_with_login_teams(self,):
+        self.yfs.use_login = True
+        response = self.yfs.get_games_info(['346'], teams=True)
+        self.yfs.use_login = False
+        self.assertEqual(response.status_code, 200)
+        #logging.debug(pretty_json(response.content))          
         
     def test_get_games_info_with_login(self,):
         self.yfs.use_login = True
         response = self.yfs.get_games_info(['mlb'])
         self.yfs.use_login = False
-        logging.debug(pretty_json(response.content))
+        #logging.debug(pretty_json(response.content))
         self.assertEqual(response.status_code, 200)
         
 class TestFantasySportLeague(unittest.TestCase):
@@ -68,7 +86,12 @@ class TestFantasySportLeague(unittest.TestCase):
         #logging.debug(pretty_json(response.content))
 
     def test_get_leagues_standings(self):
-        response = self.yfs.get_leagues_standings(['238.l.627060','238.l.627062'])
+        response = self.yfs.get_leagues_standings(['346.l.1328'])
+        self.assertEqual(response.status_code, 200)
+        #logging.debug(pretty_json(response.content))
+        
+    def test_get_leagues_standings_withteam_androsterplayers(self):
+        response = self.yfs.get_leagues_standings(['346.l.1328'], teams='roster', players='ownership')
         self.assertEqual(response.status_code, 200)
         #logging.debug(pretty_json(response.content))
 
@@ -159,6 +182,26 @@ class TestFantasySportTeam(unittest.TestCase):
     #    #logging.debug(pretty_json(response.content))
     #    self.assertEqual(response.status_code, 200)
         
+    def test_get_teams_roster_week(self,):
+        response = self.yfs.get_teams_roster(['223.l.431.t.9'], week=1)
+        #logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_roster_weekplayer(self,):
+        response = self.yfs.get_teams_roster(['223.l.431.t.9'], week=1, players='draft_analysis')
+        #logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)    
+                
+    def test_get_teams_roster_players(self,):
+        response = self.yfs.get_teams_roster(['346.l.1328.t.12'], players='draft_analysis')
+        #logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_get_teams_roster_filter(self,):
+        response = self.yfs.get_teams_roster(['346.l.1328.t.12'], filters='position=3B')
+        #logging.debug(pretty_json(response.content))
+        self.assertEqual(response.status_code, 200)
+   
     def test_get_teams_draftresults(self,):
         response = self.yfs.get_teams_draftresults(['346.l.1328.t.12'])
         #logging.debug(pretty_json(response.content))

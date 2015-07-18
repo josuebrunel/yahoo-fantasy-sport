@@ -38,10 +38,16 @@ class FantasySport(object):
 
         return response
 
-    def _put(self, uri, data={}):
+    def _put(self, uri, roster):
         """
+        - uri : roster resource uri
+        - roster : roster object
         """
-        pass
+        headers = {'Content-Type':'application/{0}'.self.fmt}
+        data = roster.to_json() if self.fmt == 'json' else roster.to_xml() # Getting roster xml or json according to self.fmt
+
+        response = self.oauth.session.put(uri, data=data, headers=headers)
+
 
     def _add_login(self, uri):
         """Add users;use_login=1/ to the uri
@@ -61,7 +67,7 @@ class FantasySport(object):
         if resources:
             uri = "{0}={1}".format(resources, self._format_resources_key(keys))
         else:
-            uri = '{0}'.format(self._format_resources_key(keys))
+           uri = '{0}'.format(self._format_resources_key(keys))
 
         if sub and isinstance(sub, str) :
             uri += "/{0}".format(sub)
@@ -86,14 +92,26 @@ class FantasySport(object):
     #
     #################################
 
-    def get_games_info(self, game_keys):
+    def get_games_info(self, game_keys, leagues=None, teams=False, players=None):
         """Return game info
         >>> yfs.get_games_info('mlb')
+        Must set use_login to True to pull teams data
         """
         uri = self._build_uri('games;game_keys', game_keys)
+        
+        if leagues:
+            uri += '/leagues;league_keys={0}'.format(leagues)
+        
+        if teams:
+            uri += '/teams'
+            
+        if players:
+            uri += '/players;player_keys={0}'.format(players)
+            
         response = self._get(uri)
 
         return response
+
 
     ####################################
     #
@@ -144,11 +162,18 @@ class FantasySport(object):
         response = self._get(uri)
         return response
 
-    def get_leagues_standings(self, league_keys):
+    def get_leagues_standings(self, league_keys, teams=None, players=None):
         """Return leagues settings
         >>> yfs.get_leagues_settings(['238.l.627062','238.l.627062'])
         """
         uri = self._build_uri('leagues;league_keys', league_keys, sub='standings')
+        
+        if teams:
+            uri += '/teams/{0}'.format(teams)
+            
+        if teams=='roster' and players:
+            uri += '/players/{0}'.format(players)
+        
         response = self._get(uri)
         return response
 
@@ -276,7 +301,7 @@ class FantasySport(object):
             uri += '/players;{0}'.format(filters) 
             
         elif players and not filters:
-            uri += 'players/{0}'.format(players)   
+            uri += '/players/{0}'.format(players)   
         
         response = self._get(uri)
         return response
@@ -324,6 +349,20 @@ class FantasySport(object):
             uri += ';date={0}'.format(date)
         
         response = self._get(uri)
+        return response 
+
+    def set_roster_players(self, team_keys, roster):
+        """
+        >>> from fantasy_sport import Roster, Player
+        >>> p1 = Player('242.p.8332','WR')
+        >>> p2 = Player('242.p.8334','WL')
+        >>> roster = Roster([p1, p2], date='2015-01-11')
+        >>> ysf.set_roster_players(['238.l.627062'], roster)
+        """
+        uri = self._build_uri(None, team_keys, sub='roster/players')
+        uri = 'team/{0}'.format(uri)
+
+        response = self._put(uri, roster)
         return response 
         
         

@@ -80,7 +80,7 @@ class FantasySport(object):
         return uri
 
     def get_collections(self, resource_type, resource_ids, sub_resources):
-        """Generic method to get collections
+        """Test Generic method to get collections
         """
         uri = self._build_uri(resource_type, resource_ids, sub=sub_resources)
         response = self._get(uri)

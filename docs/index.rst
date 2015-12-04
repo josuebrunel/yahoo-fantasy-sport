@@ -11,6 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   fantasy_sport
 
 
 Indices and tables

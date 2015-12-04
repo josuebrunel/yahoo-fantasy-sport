@@ -1,0 +1,5 @@
+# TODO
+- Add pytest
+- Add tox
+- Fix up .travis.yml
+- Figure out sphinx documentation

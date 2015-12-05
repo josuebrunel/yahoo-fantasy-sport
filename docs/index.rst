@@ -11,7 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   fantasy_sport
+   yahoo_fantasy_sports
+   yahoo_fantasy_sports.resources
 
 
 Indices and tables

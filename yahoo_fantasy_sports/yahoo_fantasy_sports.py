@@ -1,25 +1,32 @@
 from __future__ import absolute_import
 
 
-class FantasySport(object):
-    """FantasySport Class
+class YahooFantasySport(object):
+    """
+    Interact with the Yahoo Fantasy Sports Servers.
+
+    :param oauth: OAuth1 instance connected to the Yahoo servers.
+    :type oauth: yahoo_oauth.Oauth1
+    :param fmt: Format of the response. Either 'json' or 'xml'. Defaults
+        to 'json'.
+    :type fmt: str
+    :param use_login:
+    :type use_login: bool
     """
 
     url = 'http://fantasysports.yahooapis.com/fantasy/v2/'
 
-    def __init__(self, oauth, fmt=None, use_login=False):
-        """Initialize a FantasySport object
-        """
+    def __init__(self, oauth, fmt='json', use_login=False):
         self.oauth = oauth
-        self.fmt = 'json' if not fmt else fmt  # JSON as default format
+        self.fmt = fmt
         self.use_login = use_login
 
-
-    def __repr__(self,):
+    def __repr__(self):
         return "<{0}> <{1}>".format(self.url, self.fmt)
 
-    def _check_token_validity(self,):
-        """Check wether or not the access token is still valid, if not, renews it
+    def _check_token_validity(self):
+        """
+        If access token is not valid, then renew it.
         """
         if not self.oauth.token_is_valid():
             self.oauth.refresh_access_token
@@ -28,14 +35,11 @@ class FantasySport(object):
     def _get(self, uri):
         """
         """
-
-        if not self.oauth.oauth.base_url :
+        if not self.oauth.oauth.base_url:
             self.oauth.oauth.base_url = self.url
-        
+
         self._check_token_validity()
-
         response = self.oauth.session.get(uri, params={'format': self.fmt})
-
         return response
 
     def _put(self, uri, roster):
@@ -43,33 +47,31 @@ class FantasySport(object):
         - uri : roster resource uri
         - roster : roster object
         """
-        headers = {'Content-Type':'application/{0}'.self.fmt}
-        data = roster.to_json() if self.fmt == 'json' else roster.to_xml() # Getting roster xml or json according to self.fmt
-
+        headers = {'Content-Type': 'application/{0}'.self.fmt}
+        # Getting roster xml or json according to self.fmt
+        data = roster.to_json() if self.fmt == 'json' else roster.to_xml()
         response = self.oauth.session.put(uri, data=data, headers=headers)
-
 
     def _add_login(self, uri):
         """Add users;use_login=1/ to the uri
         """
         uri = "users;use_login=1/{0}".format(uri)
-
         return uri
 
     def _format_resources_key(self, keys):
-        """Format resources keys 
+        """Format resources keys
         """
-        return ','.join(str(e) for e in keys) 
-        
+        return ','.join(str(e) for e in keys)
+
     def _build_uri(self, resources, keys, sub=None):
         """Build uri
         """
         if resources:
             uri = "{0}={1}".format(resources, self._format_resources_key(keys))
         else:
-           uri = '{0}'.format(self._format_resources_key(keys))
+            uri = '{0}'.format(self._format_resources_key(keys))
 
-        if sub and isinstance(sub, str) :
+        if sub and isinstance(sub, str):
             uri += "/{0}".format(sub)
         if sub and not isinstance(sub, str):
             uri += ";out={0}".format(','.join([e for e in sub]))

@@ -6,6 +6,7 @@ import json
 
 from xml.etree import cElementTree as ctree
 
+
 @six.add_metaclass(abc.ABCMeta)
 class Base(object):
     """Base class for Roster and Player
@@ -18,7 +19,7 @@ class Base(object):
     @abc.abstractmethod
     def json_builder(self,):
         raise NotImplementedError
-   
+
     def to_json(self,):
         """Return object as a json string
         """

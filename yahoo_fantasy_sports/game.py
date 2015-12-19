@@ -6,7 +6,6 @@ from . import YahooFantasySportsError
 from .utils import build_uri, yfs_request
 
 import arrow
-import pdb
 
 
 class GamesFactory(object):

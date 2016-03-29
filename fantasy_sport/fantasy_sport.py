@@ -43,7 +43,7 @@ class FantasySport(object):
         - uri : roster resource uri
         - roster : roster object
         """
-        headers = {'Content-Type':'application/{0}'.self.fmt}
+        headers = {'Content-Type':'application/{0}'.format(self.fmt)}
         data = roster.to_json() if self.fmt == 'json' else roster.to_xml() # Getting roster xml or json according to self.fmt
 
         response = self.oauth.session.put(uri, data=data, headers=headers)
